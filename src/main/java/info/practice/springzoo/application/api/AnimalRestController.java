@@ -2,17 +2,18 @@ package info.practice.springzoo.application.api;
 
 
 import info.practice.springzoo.application.AnimalService;
-import info.practice.springzoo.application.domain.animal.AnimalDto;
+
 import info.practice.springzoo.application.domain.animal.AnimalRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.Api;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 
+@Api
 @RestController
+@RequestMapping(path = "/zoo")
 public class AnimalRestController {
     private final AnimalService animalService;
 
@@ -20,12 +21,12 @@ public class AnimalRestController {
         this.animalService = animalService;
     }
 
-    @GetMapping("zoo")
-    public AnimalListResponse list(){
-        return new AnimalListResponse(animalService.getAllAnimals());
+    @GetMapping("/animals")
+    public ResponseEntity<AnimalListResponse> list(){
+        return ResponseEntity.ok(AnimalListResponse.from(animalService.getAllAnimals()));
     }
 
-    @PostMapping("zoo")
+    @PostMapping("/animals")
     public void add(@Valid @RequestBody AnimalRequest animalRequest){
         animalService.addAnimal(animalRequest.toAnimalDto());
     }

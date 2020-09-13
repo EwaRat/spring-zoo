@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()//wyl CSRF
                 .authorizeRequests()  //autoryzuj zapytania i ponizej wypisujemy jakie zapytania maja byc uzupelnione
-                .antMatchers("/securityNone").permitAll()
+                .antMatchers("/actuator/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
+                .antMatchers().permitAll()
                 .antMatchers(HttpMethod.POST,"/animals").hasAuthority("ROLE_ADMIN") //dla metody Post z endpointem animals - to chcemy zeby tylko bylo realizowane przez role admin
                 .anyRequest().authenticated()
                 .and()
